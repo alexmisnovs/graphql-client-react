@@ -14,6 +14,25 @@ export async function getJobs() {
       }
     }
   `;
-  const data = await request(GRAPHQL_URL, query);
-  console.log(data);
+  const { jobs } = await request(GRAPHQL_URL, query);
+  return jobs;
+}
+
+export async function getJobById(id) {
+  const query = gql`
+    query JobQuery($id: ID!) {
+      job(id: $id) {
+        id
+        title
+        company {
+          id
+          name
+        }
+        description
+      }
+    }
+  `;
+  const variables = { id: id };
+  const { job } = await request(GRAPHQL_URL, query, variables);
+  return job;
 }
