@@ -4,13 +4,25 @@ import { useEffect, useState } from "react";
 
 function JobBoard() {
   const [jobs, setJobs] = useState([]);
+  //basic error handling
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+
   useEffect(() => {
     // call the server
     // set jobs
-    console.log("mounted");
     // getJobs().then(jobs => setJobs(jobs));
-    getJobs().then(setJobs);
+    getJobs()
+      .then(setJobs)
+      .catch(err => {
+        setErrorMessage(err.message);
+        setIsError(true);
+      });
   }, []);
+
+  console.log(isError);
+  if (isError) return <pre>Something went wrong: {errorMessage}</pre>;
+
   return (
     <div>
       <h1 className="title">Job Board</h1>
