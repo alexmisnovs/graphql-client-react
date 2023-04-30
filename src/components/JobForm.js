@@ -1,38 +1,44 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { createJob } from "../graphql/mutations";
 
 function JobForm() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    console.log('should post a new job:', { title, description });
+    const companyId = "wvdB54Gqbdp_NZTXK9Tue"; // temporary hard coded
+    const createdJob = await createJob({ title, description, companyId });
+    // console.log(createdJob);
+    navigate(`/jobs/${createdJob.id}`);
   };
 
   return (
     <div>
-      <h1 className="title">
-        New Job
-      </h1>
+      <h1 className="title">New Job</h1>
       <div className="box">
         <form>
           <div className="field">
-            <label className="label">
-              Title
-            </label>
+            <label className="label">Title</label>
             <div className="control">
-              <input className="input" type="text" value={title}
-                onChange={(event) => setTitle(event.target.value)}
+              <input
+                className="input"
+                type="text"
+                value={title}
+                onChange={event => setTitle(event.target.value)}
               />
             </div>
           </div>
           <div className="field">
-            <label className="label">
-              Description
-            </label>
+            <label className="label">Description</label>
             <div className="control">
-              <textarea className="textarea" rows={10} value={description}
-                onChange={(event) => setDescription(event.target.value)}
+              <textarea
+                className="textarea"
+                rows={10}
+                value={description}
+                onChange={event => setDescription(event.target.value)}
               />
             </div>
           </div>
